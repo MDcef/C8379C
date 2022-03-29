@@ -39,11 +39,21 @@ con2 <- dbConnect(
 )
 
 
-# tt <- dbGetQuery(con1, "SELECT * FROM bycatch_fishing_activity.test_table")
-# tacEfC <- dbGetQuery(con1, "SELECT * FROM bycatch_fishing_activity.tacsat_eflalo_csquare_2019")
-
+#retrieve data from database
 lancomp <- dbGetQuery(con2, "SELECT * FROM geofish_age.month_landing_composition_2009_2019")
 
-gearChoices = unique(lancomp$gear_name) #setNames(lancomp$gear_name, lancomp$gear_name)
-monthChoices = unique(lancomp$le_month) # setNames(lancomp$le_month, lancomp$le_month)
-yearChoices = unique(lancomp$le_year) # setNames(lancomp$le_year, lancomp$le_year)
+#withdraws the unique entries from the selected columns to be the choosable labels in the sidebar
+gearChoices = unique(lancomp$gear_name)
+
+speChoices = unique(lancomp$species_common)
+
+#sorting to descending
+monthChoices = unique(lancomp$le_month)
+monthChoices <- as.data.frame(monthChoices)
+monthChoices <- monthChoices[order(monthChoices),]
+
+yearChoices = unique(lancomp$le_year)
+yearChoices <- as.data.frame(yearChoices)
+yearChoices <- subset(yearChoices, yearChoices >1999)
+yearChoices <- yearChoices[order(yearChoices),]
+
